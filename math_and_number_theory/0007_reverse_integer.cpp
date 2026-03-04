@@ -1,24 +1,25 @@
-#include <algorithm>
-#include <stdexcept>
-#include <string>
+#include <climits>
 
 class Solution {
 public:
-    int reverse(int x) {
-        try {
-            std::string str = std::to_string(Solution::safe_abs(x));
-            if (x < 0) str.push_back('-');
-            std::reverse(str.begin(), str.end());
-            return std::stoi(str);
-        } catch (std::out_of_range& e) {
-            return 0;
-        } catch (std::overflow_error& e) {
-            return 0;
-        }
-    }
+    static int reverse(int x) {
+        int rev = 0;
 
-    static int safe_abs(int x) {
-        if (x == INT_MIN)  throw std::overflow_error("Result would overflow for INT_MIN");
-        return std::abs(x);
+        while (x != 0)
+        {
+            int digit = x % 10;
+            x /= 10;
+
+            if (rev > INT_MAX / 10 || (rev == INT_MAX / 10 && digit > 7))
+                return 0;
+
+            if (rev < INT_MIN / 10 || (rev == INT_MIN / 10 && digit < -8))
+                return 0;
+
+            x = LONG_LOn
+
+            rev = rev * 10 + digit;
+        }
+        return rev;
     }
 };
