@@ -1,8 +1,10 @@
 import json
 from pathlib import Path
 
-with open('metadata.json') as f:
-    metadata = json.load(f)
+with open('leetcode_problems.json') as f:
+    metadata_list = json.load(f)
+
+metadata = {item["id"].lstrip("0"): item for item in metadata_list}
 
 # Mapas de badges
 difficulty_badges = {
@@ -38,29 +40,7 @@ def get_badge(mapping, key, default_color="grey"):
 root = Path(__file__).parent
 folders = [f for f in root.iterdir() if f.is_dir() and f.name != ".git"]
 
-header = """# LeetCode Solutions
-
-> This repository contains my solutions to [LeetCode](https://leetcode.com/u/YannLeao/) problems, as part of my 
-studies in algorithms, data structures and data analysis.
-
-## Progress
-<div align="center" justify="center">
-<img src="https://leetcard.jacoblin.cool/YannLeao?ext=heatmap&theme=transparent&border=0">
-</div>
-
-## Badges
-
-### Annual Badges
-<div align="left">
-<img src="_assets/Badge_50_Days.gif" width="10%">
-</div>
-
-### Study Plan Badges
-<div align="left">
-<img src="_assets/Badge_Introduction_to_Pandas.gif" width="10%">
-<img src="_assets/Badge_SQL_50.gif" width="10%">
-</div>
-
+header = """
 ## Solved Problems
 
 | Nº   | Problem | Tags | Difficulty | Language |
@@ -86,7 +66,7 @@ for folder in sorted(folders):
         title = smart_title(raw_name)
         path = f"{folder.name}/{file.name}"
 
-        metadata_entry = metadata.get(number, {})
+        metadata_entry = metadata.get(number.lstrip("0"), {})
         tags = metadata_entry.get("tags", [folder.name.replace("_", " ").title()])
         tag = ", ".join(tags)
 
@@ -100,7 +80,7 @@ for folder in sorted(folders):
 rows.sort(key=lambda x: x[0])
 
 
-output_file = "README.md"
+output_file = "PROBLEMS.md"
 with open(output_file, "w", encoding="utf-8") as f:
     f.write(header)
     f.write("\n".join(row for _, row in rows))
